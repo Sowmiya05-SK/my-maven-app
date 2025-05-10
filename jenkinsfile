@@ -1,37 +1,49 @@
 pipeline {
-    agent any
+    agent any  // This will use the available agent (Windows in your case)
 
     tools {
-        maven 'Maven 3.9.9'
-        jdk 'JDK 21'        
+        maven 'Maven 3.9.9  // Replace this with your Maven version
+    }
+
+    environment {
+        JAVA_HOME = 'C:\Program Files\Java\jdk-21'  // Make sure the JAVA_HOME path is correct for your system
+        MAVEN_HOME = 'C:\Users\SOWMIYA\Downloads\apache-maven-3.9.9-bin.zip\apache-maven-3.9.9'  // Adjust Maven path
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/Sowmiya05-SK/my-maven-app.git'
+                // Checkout the code from SCM (Git, etc.)
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                // Run Maven clean install on Windows using bat instead of sh
+                bat 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                // Running tests (if applicable)
+                bat 'mvn test'  // Or other test commands depending on your project
             }
         }
+
+        // Optionally add other stages for deployment, packaging, etc.
     }
 
     post {
+        always {
+            echo 'This will always run after the pipeline, regardless of success/failure.'
+        }
         success {
-            echo '✅ Build & Test Passed!'
+            echo 'This will run if the pipeline completes successfully.'
         }
         failure {
-            echo '❌ Build or Tests Failed!'
+            echo 'This will run if the pipeline fails.'
         }
     }
 }
