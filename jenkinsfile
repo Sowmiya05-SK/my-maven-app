@@ -9,9 +9,21 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Sowmiya05-SK/my-maven-app.git'
+                pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.9.9'
+        jdk 'JDK 21'        
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Sowmiya05-SK/my-maven-app.git'
             }
         }
+
 
         stage('Build') {
             steps {
