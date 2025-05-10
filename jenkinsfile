@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven_3.9.9'  // Replace this with your Maven tool name
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,20 +14,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean install'
+                bat 'mvn clean install'  // This will run your Maven build
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                echo 'Running tests'  // Example test stage
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline completed.'
         }
     }
 }
